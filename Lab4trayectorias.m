@@ -1,36 +1,36 @@
-%Script para el desarrollo del laboratorio:
 clc;
 clear;
 close all;
 
-%--------------------------------------------------------------------------
-l=1.61*0.4; %longitud max 1610mm, 16.1dm
-x0=0.75;
-y0=-0.5;
-z0=0.8;
-p=1.5*l+(pi*(l/4)); %Se calcula el perimetro de la figura
-paso=p/60; % Se decide la cantidad de puntos, y se obtiene el paso
+l=0.951*0.4; %longitud max 951mm
+
+x0=0.5;
+y0=-(l/4);
+z0=0.5;
+p=1.5*l+(pi*(l/4)); %Perimetro de la figura
+paso=p/60; %Cantidad de puntos, Paso
+
 %% Se hacen las 4 trayectorias a seguir, a trozos 
-t1= 0:paso:l/2;
-t2= 0:(4*paso/l): pi;
-t3= 0:paso:l/2;
-t4= 0:paso:l/2;
+t1= linspace(0,l/2,20);
+t2= linspace(0,pi,20);
+t3= linspace(0,l/2,20);
+t4= linspace(0,l/2,20);
 
-x1 = x0+t1;
-z1 = z0+t1-t1+(l/4)*sin(pi/2);
-y1 = -(z1-z0)+y0;
+y1 = y0+t1;
+z1 = z0+t1-t1;
+x1 = (t1-t1)+x0;
 
-x2= x0+l/2+(l/4)*sin(t2);
-z2= z0+(l/4)*cos(t2)*sin(pi/2);
-y2= -(z2-z0)+y0;
+y2= y0+l/2+(l/2)*sin(t2);
+z2= z0+((l/2)/pi)*t2*sin(pi/4);
+x2= x0+((l/2)/pi)*t2*cos(pi/4);
 
-x3 = x0+-t3+(l/2);
-z3 = z0+t3-t3-(l/4)*sin(pi/2);
-y3= -(z3-z0)+y0;
+y3 = y0+(l/2)-t3;
+z3 = z0+t3-t3+(l/2)*sin(pi/4);
+x3= -(t3-t3)+x0+(l/2)*cos(pi/4);
 
-x4 = x0+t4-t4;
-z4 = z0+t4-(l/4)*sin(pi/2);
-y4 = -(z4-z0)+y0;
+y4 = y0+t4-t4;
+z4 = z0+t4-t4+(l/2)*sin(pi/4)-t4*cos(pi/4);
+x4 = x0+t4-t4+(l/2)*cos(pi/4)-t4*cos(pi/4);
 
 
 %Ahora se plotean las trayectorias
@@ -58,23 +58,16 @@ scatter3(x4,y4,z4)
 ws = [-100 100 -100 100 -100 400]/100;
 plot_options={'workspace',ws,'scale',.4,'view',[-160,39],'tilesize',2,'ortho', 'lightpos',[2 2 14]};
 
-%Se ubican las distancias de todos los eslabones
-l1=0.525;
-l2=0.770;
-l3=0.100;
-l4=0.150;
-l5=0.740;
-l6=0.100;
 
-%Se definen las articulaciones del robot
-L(1) = Link('revolute' ,'alpha', 0,     'a', 0,     'd', l1 , 'offset', 0, 'modified');
-L(2) = Link('revolute' ,'alpha', -pi/2, 'a', l4,  'd', 0 ,   'offset', -pi/2, 'modified');
-L(3) = Link('revolute' ,'alpha', 0,     'a', l2,  'd', 0,    'offset', 0, 'modified');
-L(4) = Link('revolute' ,'alpha', -pi/2, 'a', l3,  'd', l5 ,'offset', 0, 'modified');
-L(5) = Link('revolute' ,'alpha', pi/2,  'a', 0,     'd', 0 ,    'offset', 0, 'modified');
-L(6) = Link('revolute' ,'alpha', -pi/2, 'a', 0,     'd', l6 , 'offset', -pi/2, 'modified');
+L1=0.265; L2=0.444; L3=0.110; L4=0.470; L5=0.080; L6=0.037;
 
-Robot = SerialLink(L,'name','Robot_{RRRRRR}','plotopt',plot_options);
+L(1) = Link('revolute','alpha', 0,    'a', 0,   'd',L1,   'offset', 0,   'modified', 'qlim',[-pi pi]);
+L(2) = Link('revolute','alpha', -pi/2,    'a', 0,   'd',0,   'offset', -pi/2,   'modified', 'qlim',[-pi pi]);
+L(3) = Link('revolute','alpha', 0,    'a', L2,   'd',0,   'offset', 0,   'modified', 'qlim',[-3.92699 1.48353]);
+L(4) = Link('revolute','alpha', -pi/2,    'a', L3,   'd',L4,   'offset', 0,   'modified', 'qlim',[-pi pi]);
+L(5) = Link('revolute','alpha', pi/2,    'a', 0,   'd',0,   'offset', 0,   'modified', 'qlim',[-pi pi]);
+L(6) = Link('revolute','alpha', -pi/2,    'a', L5,   'd',L6,   'offset', 0,   'modified', 'qlim',[-pi pi]);
+Robot = SerialLink(L,'name','ABB CRB 15000','plotopt',plot_options); 
 
 Robot.tool= [1 0 0 0;
             0 1 0 0;
