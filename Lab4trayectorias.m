@@ -78,9 +78,9 @@ q=[0 0 0 0 0 0];
 Robot.teach(q)
 
 %% Se calculan los movimientos
-rpy=[0 0 0];
+rpy=[1.1071 0.7297 -1.1071]; %[r,p,y]=rod2angle([-1,0,1])
 for i=1:length(x) 
-[q1(i) q2(i) q3(i) q4(i) q5(i) q6(i)]=myik([pi/4,0,0],[x(i),y(i),z(i)],Robot);
+[q1(i) q2(i) q3(i) q4(i) q5(i) q6(i)]=myik(rpy,[x(i),y(i),z(i)],Robot);
 %rpy(i,:)=tr2rpy(Robot.fkine([q1(i) q2(i) q3(i) q4(i) q5(i) q6(i)]));
 end
 
