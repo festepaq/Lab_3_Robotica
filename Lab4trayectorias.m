@@ -165,6 +165,7 @@ xlabel('Tiempo (s)')
 ylabel('Ángulo (rad)')
 title('q6')
 %% Se hacen todas las graficas de velocidad
+tqv = tqv(1:79,1:6);
 figure(3)
 subplot(2,3,1)
 plot(temp0(1:end-1),tqv(:,1))
