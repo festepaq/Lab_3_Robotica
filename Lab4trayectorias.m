@@ -118,7 +118,7 @@ end
 for i=1:length(tmcur)-1
 tmcur(i+1)=tmcur(i+1)+tmcur(i); %tiempo acumulado en curva
 end
-temp0=[0:tmrec:tmrec*80 (tmcur+tmrec*80) (tmcur(20)+tmrec*80)+(tmrec:tmrec:tmrec*80)];
+temp0=[0:tmrec:tmrec*80 (tmcur+tmrec}*80) (tmcur(20)+tmrec*80)+(tmrec:tmrec:tmrec*80)];
 temp0=[temp0 temp0(80)+(tmrec:tmrec:tmrec*80)];
 
 
