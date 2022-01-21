@@ -75,12 +75,15 @@ Robot.tool= [1 0 0 0;
             0 0 0 1];
 %% Se lleva el robot a home
 q=[0 0 0 0 0 0];
+ql = [0 0 0 0 0 0];
 Robot.teach(q)
 
 %% Se calculan los movimientos
 rpy=[1.1071 0.7297 -1.1071]; %[r,p,y]=rod2angle([-1,0,1])
 for i=1:length(x)   
-[q1(i) q2(i) q3(i) q4(i) q5(i) q6(i)]=pos_q(rpy,[x(i),y(i),z(i)],Robot);
+    
+[q1(i) q2(i) q3(i) q4(i) q5(i) q6(i)]=pos_q(rpy,[x(i),y(i),z(i)],Robot,ql);
+ql=[q1(i) q2(i) q3(i) q4(i) q5(i) q6(i)]';
 %rpy(i,:)=tr2rpy(Robot.fkine([q1(i) q2(i) q3(i) q4(i) q5(i) q6(i)]));
 end
 
@@ -228,11 +231,11 @@ q6 = atan2(s6,sqrt(1-s6^2));
 
 end
 
-function [q1,q2,q3,q4,q5,q6] = pos_q(rpy, tras, SerialLink)
+function [q1,q2,q3,q4,q5,q6] = pos_q(rpy, tras, SerialLink,qn)
 R=rpy2r(rpy);
 Target = [R,tras';0 0 0 1];
 
-qSolve= SerialLink.ikcon(Target);
+qSolve= SerialLink.ikcon(Target,qn);
 q1 = qSolve(1);
 q2 = qSolve(2);
 q3 = qSolve(3);
