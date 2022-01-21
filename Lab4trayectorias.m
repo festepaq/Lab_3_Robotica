@@ -109,7 +109,7 @@ N(i)=sqrt((x2v(i).^2)+(y2v(i).^2)+(z2v(i).^2));
 tmrec=(x1(2)-x1(1))/v; %Tiempo entre los puntos de las partes rectas
 tmcur(1)=(x2(1)-x1(20))/v;%Punto de unión entre recta y curva    %Se cambió de 14 a 20
 tmcur(i+1)=N(i)/v;%Tiempo entre puntos de la curva 
-tmcur(20)=0.0152/v; %SE CAMBIÓ ESTE VALOR
+tmcur(21)=0.0152/v; %SE CAMBIÓ ESTE VALOR
 
 end
 %%
@@ -118,8 +118,11 @@ end
 for i=1:length(tmcur)-1
     tmcur(i+1)=tmcur(i+1)+tmcur(i); %tiempo acumulado en curva
 end
-temp0=[0:tmrec:tmrec*20 (tmcur+tmrec*20) (tmcur(20)+tmrec*80)+(tmrec:tmrec:tmrec*80)];
-temp0=[temp0 temp0(80)+(tmrec:tmrec:tmrec*80)];
+temp0=[linspace(0,tmrec*20,20) (tmcur+tmrec*20) (tmcur(21)+tmrec*20)+linspace(0,tmrec*19,19)];
+temp0 = [temp0 temp0(60)+linspace(0,tmrec*20,20)];
+
+% temp0=[0:tmrec:tmrec*20 (tmcur+tmrec)*20 (tmcur(20)+tmrec*20)+(tmrec:tmrec:tmrec*20)];
+% temp0=[temp0 temp0(60)+(tmrec:tmrec:tmrec*80)];
 
 
 
