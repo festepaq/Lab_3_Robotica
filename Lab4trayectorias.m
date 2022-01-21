@@ -20,7 +20,7 @@ y1 = y0+t1;
 z1 = z0+t1-t1;
 x1 = (t1-t1)+x0;
 
-y2= y0+l/2+(l/2)*sin(t2);
+y2= -sqrt((l/4).^2 + ((t1)-l/4).^2)+y0+l/2 + sqrt((l/4).^2 + ((l/2)-l/4).^2);
 z2= z0+((l/2)/pi)*t2*sin(pi/4);
 x2= x0+((l/2)/pi)*t2*cos(pi/4);
 
@@ -79,8 +79,8 @@ Robot.teach(q)
 
 %% Se calculan los movimientos
 rpy=[1.1071 0.7297 -1.1071]; %[r,p,y]=rod2angle([-1,0,1])
-for i=1:length(x) 
-[q1(i) q2(i) q3(i) q4(i) q5(i) q6(i)]=myik(rpy,[x(i),y(i),z(i)],Robot);
+for i=1:length(x)   
+[q1(i) q2(i) q3(i) q4(i) q5(i) q6(i)]=pos_q(rpy,[x(i),y(i),z(i)],Robot);
 %rpy(i,:)=tr2rpy(Robot.fkine([q1(i) q2(i) q3(i) q4(i) q5(i) q6(i)]));
 end
 
@@ -89,12 +89,13 @@ end
 tqc=[q1' q2' q3' q4' q5' q6'];
 
 %% Trayectoria inicial Home to start:
-tq = jtraj(q,tqc(1,:),20);
+tq = jtraj(q,tqc(1,:),40);
 Robot.plot(tq)
 
 %%
 Robot.plot(tqc)
 %%
+v=0.5
 for i=1:length(x2)-1 
 %Busqueda de las distancia entre los puntos pertenecientes a la curva
 x2v(i)=x2(i+1)-x2(i);
@@ -102,10 +103,10 @@ y2v(i)=y2(i+1)-y2(i);
 z2v(i)=z2(i+1)-z2(i);
 N(i)=sqrt((x2v(i).^2)+(y2v(i).^2)+(z2v(i).^2));
 
-tmrec=(x1(2)-x1(1))/0.5; %Tiempo entre los puntos de las partes rectas
-tmcur(1)=(x2(1)-x1(14))/0.5;%Punto de unión entre recta y curva
-tmcur(i+1)=N(i)/0.5;%Tiempo entre puntos de la curva 
-tmcur(22)=0.0152/0.5;
+tmrec=(x1(2)-x1(1))/v; %Tiempo entre los puntos de las partes rectas
+tmcur(1)=(x2(1)-x1(20))/v;%Punto de unión entre recta y curva    %Se cambió de 14 a 20
+tmcur(i+1)=N(i)/v;%Tiempo entre puntos de la curva 
+tmcur(20)=0.951/v; %SE CAMBIÓ ESTE VALOR
 
 end
 %%
@@ -114,8 +115,8 @@ end
 for i=1:length(tmcur)-1
 tmcur(i+1)=tmcur(i+1)+tmcur(i); %tiempo acumulado en curva
 end
-temp0=[0:tmrec:tmrec*13 (tmcur+tmrec*13) (tmcur(22)+tmrec*13)+(tmrec:tmrec:tmrec*13)];
-temp0=[temp0 temp0(49)+(tmrec:tmrec:tmrec*14)];
+temp0=[0:tmrec:tmrec*20 (tmcur+tmrec*20) (tmcur(20)+tmrec*20)+(tmrec:tmrec:tmrec*20)];
+temp0=[temp0 temp0(20)+(tmrec:tmrec:tmrec*20)];
 
 
 
@@ -123,7 +124,7 @@ temp0=[temp0 temp0(49)+(tmrec:tmrec:tmrec*14)];
 for i=1:length(q1)-1
 tqv(i,:)=(tqc(i+1,:)-tqc(i,:))/(temp0(i+1)-temp0(i));
 end
-tqv(49,:)= tqv(48,:);
+tqv(60,:)= tqv(59,:);
 
 %% Se hacen todas las graficas de posición
 figure(2)
@@ -190,7 +191,7 @@ xlabel('Tiempo (s)')
 ylabel('Velocidad (rad/s)')
 title('q6')
 
-%%
+%% BORRAR ESTA PARTE
 function [q1,q2,q3,q4,q5,q6] = myik(rpy, tras, SerialLink)
 T = transl(tras)*rpy2tr(rpy);
 dm = T(1:3,4)+0.1*T(1:3,2);
@@ -224,5 +225,19 @@ s4 = R3f(3,3)/sin(q5);
 q4 = atan2(s4,sqrt(1-s4^2));
 s6 = R3f(2,1)/sin(q5);
 q6 = atan2(s6,sqrt(1-s6^2));
+
+end
+
+function [q1,q2,q3,q4,q5,q6] = pos_q(rpy, tras, SerialLink)
+R=rpy2r(rpy);
+Target = [R,tras';0 0 0 1];
+
+qSolve= SerialLink.ikcon(Target);
+q1 = qSolve(1);
+q2 = qSolve(2);
+q3 = qSolve(3);
+q4 = qSolve(4);
+q5 = qSolve(5);
+q6 = qSolve(6);
 
 end
