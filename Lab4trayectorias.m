@@ -115,8 +115,8 @@ end
 for i=1:length(tmcur)-1
 tmcur(i+1)=tmcur(i+1)+tmcur(i); %tiempo acumulado en curva
 end
-temp0=[0:tmrec:tmrec*20 (tmcur+tmrec*20) (tmcur(20)+tmrec*20)+(tmrec:tmrec:tmrec*20)];
-temp0=[temp0 temp0(20)+(tmrec:tmrec:tmrec*20)];
+temp0=[0:tmrec:tmrec*80 (tmcur+tmrec*80) (tmcur(20)+tmrec*80)+(tmrec:tmrec:tmrec*80)];
+temp0=[temp0 temp0(80)+(tmrec:tmrec:tmrec*80)];
 
 
 
@@ -124,7 +124,7 @@ temp0=[temp0 temp0(20)+(tmrec:tmrec:tmrec*20)];
 for i=1:length(q1)-1
 tqv(i,:)=(tqc(i+1,:)-tqc(i,:))/(temp0(i+1)-temp0(i));
 end
-tqv(60,:)= tqv(59,:);
+tqv(80,:)= tqv(79,:);
 
 %% Se hacen todas las graficas de posición
 figure(2)
