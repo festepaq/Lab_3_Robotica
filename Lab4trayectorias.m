@@ -232,7 +232,8 @@ q6 = atan2(s6,sqrt(1-s6^2));
 end
 
 function [q1,q2,q3,q4,q5,q6] = pos_q(rpy, tras, SerialLink,qn)
-R=rpy2r(rpy);
+%R=rpy2r(rpy);
+R = roty(-45,'deg');
 Target = [R,tras';0 0 0 1];
 
 qSolve= SerialLink.ikcon(Target,qn);
