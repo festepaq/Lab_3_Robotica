@@ -17,7 +17,7 @@ Robot.tool= [1 0 0 0;
             0 0 1 0;
             0 0 0 1];
 
-q=[0 0 0 0 0 0];
+q=[0 0 0 0 0 0]; %posición a analizar
 
 jacobiano=Robot.jacob0(q)
 
