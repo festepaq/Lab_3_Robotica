@@ -118,7 +118,7 @@ end
 for i=1:length(tmcur)-1
 tmcur(i+1)=tmcur(i+1)+tmcur(i); %tiempo acumulado en curva
 end
-temp0=[0:tmrec:tmrec*80 (tmcur+tmrec}*80) (tmcur(20)+tmrec*80)+(tmrec:tmrec:tmrec*80)];
+temp0=[0:tmrec:tmrec*80 (tmcur+tmrec*80) (tmcur(20)+tmrec*80)+(tmrec:tmrec:tmrec*80)];
 temp0=[temp0 temp0(80)+(tmrec:tmrec:tmrec*80)];
 
 
@@ -232,8 +232,8 @@ q6 = atan2(s6,sqrt(1-s6^2));
 end
 
 function [q1,q2,q3,q4,q5,q6] = pos_q(rpy, tras, SerialLink,qn)
-R=rpy2r(rpy);
-R=roty(-45,'deg');
+%R=rpy2r(rpy);
+R = roty(-45,'deg');
 Target = [R,tras';0 0 0 1];
 
 qSolve= SerialLink.ikcon(Target,qn);
