@@ -74,7 +74,7 @@ Robot.tool= [1 0 0 0;
 q=[0 0 0 0 0 0];
 ql = [0 0 0 0 0 0];
 Robot.teach(q)
-
+axis([-1 1 -1 1 -0.5 1])
 %% Se calculan los movimientos
 R = roty(-45,'deg');
 for i=1:length(x)   
